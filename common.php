@@ -1,11 +1,15 @@
 <?php
+
+session_start();
+
 require_once 'config.php';
 
 $connection = new PDO("mysql:host=" . HOST . ";dbname=" . DBNAME . "", USERNAME, PASSWORD);
 
-function pre_r($array)
+
+function __($input)
 {
-    echo "<pre>";
-    print_r($array);
-    echo "</pre>";
-}
+    $translations = [];
+
+    return isset($translations[$input]) ? $translations[$input] : $input;
+};
