@@ -113,11 +113,11 @@ if (isset($_POST['checkout'])) {
 
         <form class="form-group" method="POST" action="cart.php">
             <label for="name">Name</label>
-            <input type="text" name="name" value="<?php $name ?>" placeholder="Insert your name" class="form-control"> <br />
+            <input type="text" name="name" value="" placeholder="Insert your name" class="form-control"> <br />
             <label for="contactDetails">Contact details</label>
-            <textarea rows="2" cols="30" name="contactDetails" value="<?php $contactDetails ?>" placeholder="Insert your contact details" class="form-control"></textarea> <br />
+            <textarea rows="2" cols="30" name="contactDetails" value="" placeholder="Insert your contact details" class="form-control"></textarea> <br />
             <label for="comments">Comments</label>
-            <textarea rows="4" cols="30" name="comments" value="<?php $comments ?>" placeholder="Insert your comments" class="form-control"></textarea> <br />
+            <textarea rows="4" cols="30" name="comments" value="" placeholder="Insert your comments" class="form-control"></textarea> <br />
             <input type="submit" class="btn btn-primary" name="checkout" value="Checkout"></button>
         </form>
 
