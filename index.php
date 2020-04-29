@@ -5,23 +5,22 @@ session_start();
 require_once 'config.php';
 require_once 'common.php';
 
-if (empty($_SESSION['cart'])) {
-    $_SESSION['cart'] = array();
-};
-
 if (isset($_GET['id'])) {
     array_push($_SESSION['cart'], $_GET['id']);
+}
+
+if (empty($_SESSION['cart'])) {
+    $query = 'SELECT * FROM products';
+    $_SESSION['cart'] = array();
+} else {
     $query = 'SELECT * 
     FROM `products` 
     WHERE `id` NOT IN (' . implode(', ', $_SESSION['cart']) . ')';
-} else {
-    $query = 'SELECT * FROM products';
 }
 
 $stmt = $connection->prepare($query);
 $res = $stmt->execute($_SESSION['cart']);
 $rows = $stmt->fetchAll();
-
 
 ?>
 <html lang="en">
@@ -38,6 +37,7 @@ $rows = $stmt->fetchAll();
         <table class="table">
             <thead class="thead-dark">
                 <tr>
+                    <th scope="col"></th>
                     <th scope="col">Title</th>
                     <th scope="col">Description</th>
                     <th scope="col">Price</th>
@@ -46,6 +46,7 @@ $rows = $stmt->fetchAll();
             </thead>
             <?php foreach ($rows as $row) : ?>
                 <tr>
+                    <td><img src="<?php echo $row['image'] ?>" style="width: 200px" alt=""></td>
                     <td><?php echo $row['title'] ?></td>
                     <td><?php echo $row['description'] ?></td>
                     <td><?php echo $row['price'] ?></td>
