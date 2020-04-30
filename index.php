@@ -3,22 +3,19 @@
 require_once 'common.php';
 
 if (empty($_SESSION['cart'])) {
-    $_SESSION['cart'] = [];
+    $query = 'SELECT * FROM products';
+    $_SESSION['cart'] = array();
+} else {
+    $query = 'SELECT * FROM products WHERE id NOT IN (' . implode(',', array_fill(0, count($_SESSION['cart']), '?')) . ')';
 }
 
-if (isset($_POST["add"])) {
+if (isset($_POST['add'])) {
     if (isset($_GET['id']) && !in_array($_GET['id'], $_SESSION['cart'])) {
         array_push($_SESSION['cart'], $_GET['id']);
         header("Location: index.php");
         die();
     }
 };
-
-$query =
-    'SELECT * FROM products' . (count($_SESSION['cart']) ?
-        ' WHERE id 
-        NOT IN (' . implode(',', array_fill(0, count($_SESSION['cart']), '?')) . ')' :
-        '');
 
 $stmt = $connection->prepare($query);
 $res = $stmt->execute($_SESSION['cart']);
@@ -48,12 +45,12 @@ $rows = $stmt->fetchAll();
                 </tr>
             </thead>
             <?php foreach ($rows as $row) : ?>
-                <form method="post" action="index.php?action=add&id=<?= $row["id"]; ?>">
+                <form method="post" action="index.php?action=add&id=<?= $row['id']; ?>">
                     <tr>
                         <td><img src="<?= $row['image'] ?>" style="width: 200px" alt=""></td>
                         <td><?= $row['title'] ?></td>
                         <td><?= $row['description'] ?></td>
-                        <td><?= '$' . $row['price'] ?></td>
+                        <td> $ <?= $row['price'] ?></td>
                         <td><input type="submit" name="add" class="btn btn-primary" value="<?= __('Add') ?>" /></td>
                     </tr>
                 </form>

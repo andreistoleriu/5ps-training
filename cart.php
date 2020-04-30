@@ -13,11 +13,7 @@ if (isset($_GET['delete'])) {
     exit();
 };
 
-
-$query =  'SELECT * FROM products' . (count($_SESSION['cart']) ?
-    ' WHERE id 
-        IN (' . implode(',', array_fill(0, count($_SESSION['cart']), '?')) . ')' :
-    '');
+$query = 'SELECT * FROM products WHERE id IN (' . implode(',', array_fill(0, count($_SESSION['cart']), '?')) . ')';
 
 $stmt = $connection->prepare($query);
 if (!empty(array_values($_SESSION['cart']))) {
@@ -107,7 +103,7 @@ if (isset($_POST['checkout'])) {
                     <td><img src="<?= $row['image'] ?>" style="width: 200px" alt=""></td>
                     <td><?= $row['title'] ?></td>
                     <td><?= $row['description'] ?></td>
-                    <td><?= $row['price'] ?></td>
+                    <td> $ <?= $row['price'] ?></td>
                     <td><a href="?delete=<?= $row['id'] ?>"><?= __('Delete') ?></a></td>
                 </tr>
             <?php endforeach; ?>
