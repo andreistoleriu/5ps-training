@@ -13,12 +13,19 @@ if (isset($_GET['delete'])) {
     exit();
 };
 
-$query = 'SELECT * 
-    FROM `products` 
-    WHERE `id` IN (' . implode(', ', $_SESSION['cart']) . ')';
+
+$query =  'SELECT * FROM products' . (count($_SESSION['cart']) ?
+    ' WHERE id 
+        IN (' . implode(',', array_fill(0, count($_SESSION['cart']), '?')) . ')' :
+    '');
 
 $stmt = $connection->prepare($query);
-$res = $stmt->execute($_SESSION['cart']);
+if (!empty(array_values($_SESSION['cart']))) {
+    $res = $stmt->execute(array_values($_SESSION['cart']));
+} else {
+    $_SESSION['cart'] = [];
+};
+$stmt->setFetchMode(PDO::FETCH_ASSOC);
 $rows = $stmt->fetchAll();
 
 if (isset($_POST['checkout'])) {
