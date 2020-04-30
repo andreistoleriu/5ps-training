@@ -4,7 +4,7 @@ session_start();
 
 require_once 'config.php';
 
-$connection = new PDO("mysql:host=" . HOST . ";dbname=" . DBNAME . "", USERNAME, PASSWORD);
+$connection = new PDO(HOST, USERNAME, PASSWORD);
 
 
 function __($input)

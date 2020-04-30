@@ -2,22 +2,25 @@
 
 require_once 'common.php';
 
-if (isset($_GET['id'])) {
-    array_push($_SESSION['cart'], $_GET['id']);
-}
-
 if (empty($_SESSION['cart'])) {
     $query = 'SELECT * FROM products';
-    $_SESSION['cart'] = array();
+    $_SESSION['cart'] = [];
 } else {
     $query = 'SELECT * 
     FROM `products` 
     WHERE `id` NOT IN (' . implode(', ', $_SESSION['cart']) . ')';
-}
+};
+
+if (isset($_POST["add"])) {
+    if (isset($_GET['id']) && !in_array($_GET['id'], $_SESSION['cart'])) {
+        array_push($_SESSION['cart'], $_GET['id']);
+        header("Location: index.php");
+        die();
+    }
+};
 
 $stmt = $connection->prepare($query);
 $res = $stmt->execute($_SESSION['cart']);
-$stmt->setFetchMode(PDO::FETCH_ASSOC);
 $rows = $stmt->fetchAll();
 
 ?>
@@ -31,6 +34,7 @@ $rows = $stmt->fetchAll();
 </head>
 
 <body>
+
     <div class="container">
         <table class="table">
             <thead class="thead-dark">
@@ -43,13 +47,15 @@ $rows = $stmt->fetchAll();
                 </tr>
             </thead>
             <?php foreach ($rows as $row) : ?>
-                <tr>
-                    <td><img src="<?= $row['image'] ?>" style="width: 200px" alt=""></td>
-                    <td><?= $row['title'] ?></td>
-                    <td><?= $row['description'] ?></td>
-                    <td><?= $row['price'] ?></td>
-                    <td><a href="?id=<?= $row['id'] ?>"><?= __('Add') ?></a></td>
-                </tr>
+                <form method="post" action="index.php?action=add&id=<?= $row["id"]; ?>">
+                    <tr>
+                        <td><img src="<?= $row['image'] ?>" style="width: 200px" alt=""></td>
+                        <td><?= $row['title'] ?></td>
+                        <td><?= $row['description'] ?></td>
+                        <td><?= '$' . $row['price'] ?></td>
+                        <td><input type="submit" name="add" class="btn btn-primary" value="<?= __('Add') ?>" /></td>
+                    </tr>
+                </form>
             <?php endforeach; ?>
         </table>
 

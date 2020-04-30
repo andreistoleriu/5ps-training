@@ -13,14 +13,12 @@ if (isset($_GET['delete'])) {
     exit();
 };
 
-
 $query = 'SELECT * 
-        FROM `products`
-         WHERE `id` IN (' . implode(', ', $_SESSION['cart']) . ')';
+    FROM `products` 
+    WHERE `id` IN (' . implode(', ', $_SESSION['cart']) . ')';
 
 $stmt = $connection->prepare($query);
 $res = $stmt->execute($_SESSION['cart']);
-$stmt->setFetchMode(PDO::FETCH_ASSOC);
 $rows = $stmt->fetchAll();
 
 if (isset($_POST['checkout'])) {
@@ -103,7 +101,7 @@ if (isset($_POST['checkout'])) {
                     <td><?= $row['title'] ?></td>
                     <td><?= $row['description'] ?></td>
                     <td><?= $row['price'] ?></td>
-                    <td><a href="?delete=<?= $row['id'] ?>"><?= __('Action') ?></a></td>
+                    <td><a href="?delete=<?= $row['id'] ?>"><?= __('Delete') ?></a></td>
                 </tr>
             <?php endforeach; ?>
 
