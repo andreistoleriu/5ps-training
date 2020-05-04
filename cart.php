@@ -91,6 +91,7 @@ if (isset($_POST['checkout']) && empty($nameErr) && empty($contactDetailsErr) &&
 
 
     if (mail($to, $subject, $message, $headers)) {
+        $_SESSION['cart'] = [];
         header("refresh:5;url=cart.php");
         echo "<div class='p-3 mb-2 bg-primary text-white'>The email has been sent. Thank you" . " " . $name . "</div>";
     }

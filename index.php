@@ -10,8 +10,8 @@ if (empty($_SESSION['cart'])) {
 }
 
 if (isset($_POST['add'])) {
-    if (isset($_GET['id']) && !in_array($_GET['id'], $_SESSION['cart'])) {
-        array_push($_SESSION['cart'], $_GET['id']);
+    if (isset($_POST['id']) && !in_array($_POST['id'], $_SESSION['cart'])) {
+        array_push($_SESSION['cart'], $_POST['id']);
         header("Location: index.php");
         die();
     }
@@ -42,16 +42,18 @@ $rows = $stmt->fetchAll();
                     <th scope="col"><?= __('Description') ?></th>
                     <th scope="col"><?= __('Price') ?></th>
                     <th scope="col"><?= __('Action') ?></th>
+                    <th></th>
                 </tr>
             </thead>
             <?php foreach ($rows as $row) : ?>
-                <form method="post" action="index.php?action=add&id=<?= $row['id']; ?>">
+                <form method="post" action="index.php">
                     <tr>
                         <td><img src="<?= $row['image'] ?>" style="width: 200px" alt=""></td>
                         <td><?= $row['title'] ?></td>
                         <td><?= $row['description'] ?></td>
                         <td> $ <?= $row['price'] ?></td>
                         <td><input type="submit" name="add" class="btn btn-primary" value="<?= __('Add') ?>" /></td>
+                        <td><input type="hidden" name="id" value="<?php echo $row['id'] ?>" /></td>
                     </tr>
                 </form>
             <?php endforeach; ?>

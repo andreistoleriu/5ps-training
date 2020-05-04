@@ -18,7 +18,7 @@ if (!$_SESSION['authenticated']) {
 </head>
 
 <body>
-    <h1>IN PROGRESS</h1>
+
 </body>
 
 </html>
