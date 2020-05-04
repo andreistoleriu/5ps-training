@@ -53,7 +53,7 @@ $rows = $stmt->fetchAll();
                         <td><?= $row['description'] ?></td>
                         <td> $ <?= $row['price'] ?></td>
                         <td><input type="submit" name="add" class="btn btn-primary" value="<?= __('Add') ?>" /></td>
-                        <td><input type="hidden" name="id" value="<?php echo $row['id'] ?>" /></td>
+                        <td><input type="hidden" name="id" value="<?= $row['id'] ?>" /></td>
                     </tr>
                 </form>
             <?php endforeach; ?>
