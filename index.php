@@ -48,7 +48,7 @@ $rows = $stmt->fetchAll();
             <?php foreach ($rows as $row) : ?>
                 <form method="post" action="index.php">
                     <tr>
-                        <td><img src="<?= $row['image'] ?>" style="width: 200px" alt=""></td>
+                        <td><img src="img/<?= $row['image'] ?>" style="width: 200px" alt=""></td>
                         <td><?= $row['title'] ?></td>
                         <td><?= $row['description'] ?></td>
                         <td> $ <?= $row['price'] ?></td>
@@ -59,7 +59,7 @@ $rows = $stmt->fetchAll();
             <?php endforeach; ?>
         </table>
 
-        <a href="cart.php"><?= __('Go to cart') ?></a>
+        <a href="cart.php" class="btn btn-warning"><?= __('Go to cart') ?></a>
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>

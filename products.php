@@ -13,13 +13,13 @@ if (isset($_GET['logout'])) {
 }
 
 if (isset($_GET['delete'])) {
-    $sql = 'SELECT * FROM products WHERE id = ?';
-    $stmt = $connection->prepare($sql);
+    $query = 'SELECT * FROM products WHERE id = ?';
+    $stmt = $connection->prepare($query);
     $res = $stmt->execute([$_GET['delete']]);
     $row = $stmt->fetch();
 
-    $deleteSql = 'DELETE FROM products WHERE id = ?';
-    $stmt = $connection->prepare($deleteSql);
+    $deleteQuery = 'DELETE FROM products WHERE id = ?';
+    $stmt = $connection->prepare($deleteQuery);
     $stmt->execute([$_GET['delete']]);
 
     header('Location: products.php');
@@ -39,7 +39,7 @@ $rows = $stmt->fetchAll();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title><?= __('Products page') ?></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
 </head>
@@ -54,23 +54,24 @@ $rows = $stmt->fetchAll();
                     <th scope="col"><?= __('Title') ?></th>
                     <th scope="col"><?= __('Description') ?></th>
                     <th scope="col"><?= __('Price') ?></th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
+                    <th scope="col" colspan="2">Action</th>
                 </tr>
             </thead>
             <?php foreach ($rows as $row) : ?>
                 <tr>
-                    <td><img src="<?= $row['image'] ?>" style="width: 200px" alt=""></td>
+                    <td><img src="img/<?= $row['image'] ?>" style="width: 200px" alt=""></td>
                     <td><?= $row['title'] ?></td>
                     <td><?= $row['description'] ?></td>
                     <td> $ <?= $row['price'] ?></td>
-                    <td><input type="submit" name="edit" class="btn btn-primary" value="<?= __('Edit') ?>" /></td>
-                    <td><a href="?delete=<?= $row['id']; ?>" class="btn btn-danger">Delete</a></td>
+                    <td>
+                        <a href="product.php?edit=<?= $row['id']; ?>" class="btn btn-warning">Edit</a>
+                        <a href="?delete=<?= $row['id']; ?>" class="btn btn-danger">Delete</a>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </table>
-        <a href="product.php" class="btn btn-warning">Add</a>
-        <a href="?logout" class="btn btn-warning">Log out</a>
+        <a href="product.php" class="btn btn-primary">Add</a>
+        <a href="?logout" class="btn btn-primary">Log out</a>
 
 </body>
 
