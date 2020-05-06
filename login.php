@@ -1,8 +1,8 @@
 <?php
 require_once 'common.php';
 
-$name = $password = "";
-$nameErr = $passwordErr = "";
+$name = $password = '';
+$nameErr = $passwordErr = '';
 
 if (isset($_POST['login'])) {
 
@@ -11,7 +11,7 @@ if (isset($_POST['login'])) {
         $name = USER_ADMIN;
     } elseif (empty($_POST['username'])) {
 
-        $nameErr = __("Admin username required");
+        $nameErr = __('Admin username required');
     } elseif ($_POST['username'] != USER_ADMIN) {
 
         $nameErr = __('Invalid username');
@@ -22,7 +22,7 @@ if (isset($_POST['login'])) {
         $password = PASS_ADMIN;
     } elseif (empty($_POST['password'])) {
 
-        $passwordErr = __("Admin password required");
+        $passwordErr = __('Admin password required');
     } elseif ($_POST['password'] != PASS_ADMIN) {
 
         $passwordErr = __('Invalid password');

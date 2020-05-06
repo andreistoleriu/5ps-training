@@ -6,10 +6,17 @@ require_once 'config.php';
 
 $connection = new PDO(HOST, USERNAME, PASSWORD);
 
-
 function __($input)
 {
     $translations = [];
 
     return isset($translations[$input]) ? $translations[$input] : $input;
 };
+
+function input_filter($data)
+{
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}

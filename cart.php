@@ -21,10 +21,7 @@ if (!empty(array_values($_SESSION['cart']))) {
 } else {
     $_SESSION['cart'] = [];
 };
-$stmt->setFetchMode(PDO::FETCH_ASSOC);
 $rows = $stmt->fetchAll();
-
-
 
 $name = $contactDetails = $comments = '';
 $nameErr = $contactDetailsErr = $cartErr = '';
@@ -51,49 +48,44 @@ if (isset($_POST['checkout'])) {
 
 if (isset($_POST['checkout']) && empty($nameErr) && empty($contactDetailsErr) && empty($cartErr)) {
 
-    $name = $_POST['name'];
-    $contactDetails = $_POST['contactDetails'];
-    $comments = $_POST['comments'];
-
     $to = SHOPMANAGER;
     $subject = 'Order number #';
     $headers = 'From: example@gmail.com' . "\r\n" .
         'MIME-Version: 1.0' . "r\n" .
         'Content-Type: text/html; charset=utf-8';
 
-    $message = "
+    $message = '
         <html>
             <head>
-                <title>" . __('Order number ####') . "</title>
+                <title>' . __('Order number ####') . '</title>
             </head>
             <body>
-                <p>" . __('Hello. A new order from ') . " " . ($name) . "</p>
-                <p>" . __('Please find the order details below:') . "</p>
-                <table border='1' cellpadding='2'>
+                <p>' . __('Hello. A new order from ') . ' ' . ($name) . '</p>
+                <p>' . __('Please find the order details below:') . '</p>
+                <table border="1" cellpadding="2">
             <tr>
-                <th>" . __('Name') . " </th>
-                <th>" . __('Description') . " </th>
-                <th>" . __('Price') . " </th>
-            </tr> ";
+                <th>' . __('Name') . ' </th>
+                <th>' . __('Description') . ' </th>
+                <th>' . __('Price') . ' </th>
+            </tr> ';
 
     foreach ($rows as $row) {
-        $message .= " <tr>
-                        <td>" . $row['title'] . "</td>
-                        <td>" . $row['description'] . "</td>
-                        <td>" . $row['price'] . "</td>
-                    </tr> ";
+        $message .= ' <tr>
+                        <td>' . $row['title'] . '</td>
+                        <td>' . $row['description'] . '</td>
+                        <td>' . $row['price'] . '</td>
+                    </tr> ';
     }
-    $message .= " </table>
-                <p> " . __('Contact details:') . " " . $contactDetails . "</p>
-                <p> " . __('Comments:') . " " . $comments . "</p>
+    $message .= ' </table>
+                <p> ' . __('Contact details:') . ' ' . $contactDetails . '</p>
+                <p> ' . __('Comments:') . ' ' . $comments . '</p>
             </body>
-        </html> ";
-
+        </html> ';
 
     if (mail($to, $subject, $message, $headers)) {
         $_SESSION['cart'] = [];
-        header("refresh:5;url=cart.php");
-        echo "<div class='p-3 mb-2 bg-primary text-white'>The email has been sent. Thank you" . " " . $name . "</div>";
+        header('refresh:5;url=cart.php');
+        echo '<div class="p-3 mb-2 bg-primary text-white">The email has been sent. Thank you' . ' '  . $name . '</div>';
     }
 }
 
@@ -132,25 +124,20 @@ if (isset($_POST['checkout']) && empty($nameErr) && empty($contactDetailsErr) &&
                             <td><a href="?delete=<?= $row['id'] ?>"><?= __('Delete') ?></a></td>
                         </tr>
                     <?php endforeach; ?>
-
                 </table>
+
                 <form class="form-group" method="POST" action="cart.php">
                     <label for="name"><?= __('Name') ?></label>
-                    <input type="text" name="name" value="" placeholder="<?= __('Insert your name') ?>" class="form-control" value="<?php echo $name ?>">
+                    <input type="text" name="name" placeholder="<?= __('Insert your name') ?>" class="form-control" value="<?= $name ?>">
                     <p class="text-danger"> <?= $nameErr; ?></p>
                     <label for="contactDetails"><?= __('Contact details') ?></label>
-                    <textarea rows="2" cols="30" name="contactDetails" value="" placeholder="<?= __('Insert your contact details') ?>" class="form-control" value="<?php echo $contactDetails ?>"></textarea>
+                    <textarea rows="2" cols="30" name="contactDetails" placeholder="<?= __('Insert your contact details') ?>" class="form-control" value="<?= $contactDetails ?>"></textarea>
                     <p class="text-danger"> <?= $contactDetailsErr ?></p>
                     <label for="comments"><?= __('Comments') ?></label>
-                    <textarea rows="4" cols="30" name="comments" value="" placeholder="<?= __('Insert comments') ?>" class="form-control" value="<?php echo $comments ?>"></textarea>
+                    <textarea rows="4" cols="30" name="comments" placeholder="<?= __('Insert comments') ?>" class="form-control" value="<?= $comments ?>"></textarea>
                     <input type="submit" class="btn btn-primary" name="checkout" value="<?= __('Checkout') ?>"></button>
                 </form>
-
                 <a href="index.php" class="btn btn-warning"><?= __('Go to index') ?></a>
-
-                <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-                <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     </div>
 </body>
 

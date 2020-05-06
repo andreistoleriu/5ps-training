@@ -48,12 +48,6 @@ if (isset($_POST['save']) || isset($_POST['edit'])) {
     }
 }
 
-function pre_r($array)
-{
-    echo "<pre>";
-    print_r($array);
-    echo "</pre>";
-}
 if ($titleErr == '' && $descriptionErr == '' && $priceErr == '') {
     if (isset($_POST['save'])) {
         $title = $_POST['title'];
