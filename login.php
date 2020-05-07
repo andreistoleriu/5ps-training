@@ -6,7 +6,7 @@ $nameErr = $passwordErr = '';
 
 if (isset($_POST['login'])) {
 
-    if ($_POST['username'] === USER_ADMIN) {
+    if (inputFilter($_POST['username']) === USER_ADMIN) {
 
         $name = USER_ADMIN;
     } elseif (empty($_POST['username'])) {
@@ -50,13 +50,13 @@ if (isset($_POST['login'])) {
 </head>
 
 <body>
-    <div class="container" style="max-width: 30vw; margin-top: 50px">
+    <div class="container" style="max-width: 30vw; margin-top: 50px;">
         <form class="form-group" method="POST">
             <label for="username"><?= __('Username:') ?></label>
-            <input type="text" name="username" value="" placeholder="<?= __('Insert username') ?>" class="form-control" value="">
+            <input type="text" name="username" placeholder="<?= __('Insert username') ?>" class="form-control">
             <p class="text-danger"> <?= $nameErr; ?></p>
             <label for="password"><?= __('Password:') ?></label>
-            <input type="password" name="password" value="" placeholder="<?= __('Insert password') ?>" class="form-control" value="">
+            <input type="password" name="password" placeholder="<?= __('Insert password') ?>" class="form-control">
             <p class="text-danger"> <?= $passwordErr; ?></p>
             <input type="submit" class="btn btn-primary" name="login" value="<?= __('Login') ?>"></button>
 

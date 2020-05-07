@@ -13,7 +13,7 @@ function __($input)
     return isset($translations[$input]) ? $translations[$input] : $input;
 };
 
-function input_filter($data)
+function inputFilter($data)
 {
     $data = trim($data);
     $data = stripslashes($data);

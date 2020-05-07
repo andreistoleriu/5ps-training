@@ -31,15 +31,15 @@ if (isset($_POST['checkout'])) {
     if (empty($_POST['name'])) {
         $nameErr = __('Name is required');
     } else {
-        $name = ($_POST['name']);
+        $name = inputFilter($_POST['name']);
     }
     if (empty($_POST['contactDetails'])) {
         $contactDetailsErr = __('Contact details are required');
     } else {
-        $contactDetails = ($_POST['contactDetails']);
+        $contactDetails = inputFilter($_POST['contactDetails']);
     }
 
-    $comments = ($_POST['comments']);
+    $comments = inputFilter($_POST['comments']);
 
     if (empty($_SESSION['cart'])) {
         $cartErr = __('Cart is empty');
@@ -125,7 +125,6 @@ if (isset($_POST['checkout']) && empty($nameErr) && empty($contactDetailsErr) &&
                         </tr>
                     <?php endforeach; ?>
                 </table>
-
                 <form class="form-group" method="POST" action="cart.php">
                     <label for="name"><?= __('Name') ?></label>
                     <input type="text" name="name" placeholder="<?= __('Insert your name') ?>" class="form-control" value="<?= $name ?>">
