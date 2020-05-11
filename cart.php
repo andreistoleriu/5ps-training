@@ -23,6 +23,15 @@ if (!empty(array_values($_SESSION['cart']))) {
 };
 $rows = $stmt->fetchAll();
 
+
+$priceQuery = 'SELECT SUM(price) as sum_value FROM products WHERE id IN (' . implode(',', array_fill(0, count($_SESSION['cart']), '?')) . ')';
+$priceStmt = $connection->prepare($priceQuery);
+$priceRes = $priceStmt->execute(array_values($_SESSION['cart']));
+$priceSum = $priceStmt->fetch();
+
+$timestamp = date("Y-m-d H:i:s");
+
+
 $name = $contactDetails = $comments = '';
 $nameErr = $contactDetailsErr = $cartErr = '';
 
@@ -76,11 +85,28 @@ if (isset($_POST['checkout']) && empty($nameErr) && empty($contactDetailsErr) &&
                         <td>' . $row['price'] . '</td>
                     </tr> ';
     }
-    $message .= ' </table>
+    $message .= ' 
+                     <tr>
+                        <td colspan="2" align="middle"><b>' . __('Total') . '</b></td>
+                        <td><b>' . $priceSum['sum_value'] . '</b></td>
+                    </tr>
+                    </table>
                 <p> ' . __('Contact details:') . ' ' . $contactDetails . '</p>
                 <p> ' . __('Comments:') . ' ' . $comments . '</p>
             </body>
         </html> ';
+
+
+    $query = 'INSERT INTO orders(name, contact_details, created_at) VALUES (?, ?, ?)';
+    $stmt = $connection->prepare($query);
+    $stmt->execute([$name, $contactDetails, $timestamp]);
+    $last_id = $connection->lastInsertId();
+
+    foreach ($_SESSION['cart'] as $product) {
+        $query = 'INSERT INTO product_order(order_id ,product_id, created_at) VALUES (?, ?, ?)';
+        $stmt = $connection->prepare($query);
+        $stmt->execute([$last_id, $product, $timestamp]);
+    }
 
     if (mail($to, $subject, $message, $headers)) {
         $_SESSION['cart'] = [];
@@ -120,10 +146,14 @@ if (isset($_POST['checkout']) && empty($nameErr) && empty($contactDetailsErr) &&
                             <td><img src="img/<?= $row['image'] ?>" style="width: 200px" alt=""></td>
                             <td><?= $row['title'] ?></td>
                             <td><?= $row['description'] ?></td>
-                            <td> $ <?= $row['price'] ?></td>
+                            <td>$<?= $row['price'] ?></td>
                             <td><a href="?delete=<?= $row['id'] ?>"><?= __('Delete') ?></a></td>
                         </tr>
                     <?php endforeach; ?>
+                    <tr>
+                        <td colspan="3"><b><?= __('Total') ?></b></td>
+                        <td colspan="2"><b>$<?= $priceSum['sum_value'] ?></b></td>
+                    </tr>
                 </table>
                 <form class="form-group" method="POST" action="cart.php">
                     <label for="name"><?= __('Name') ?></label>

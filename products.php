@@ -54,7 +54,7 @@ $rows = $stmt->fetchAll();
                     <th scope="col"><?= __('Title') ?></th>
                     <th scope="col"><?= __('Description') ?></th>
                     <th scope="col"><?= __('Price') ?></th>
-                    <th scope="col" colspan="2">Action</th>
+                    <th scope="col" colspan="2"><?= __('Action') ?></th>
                 </tr>
             </thead>
             <?php foreach ($rows as $row) : ?>
@@ -64,14 +64,15 @@ $rows = $stmt->fetchAll();
                     <td><?= $row['description'] ?></td>
                     <td> $ <?= $row['price'] ?></td>
                     <td>
-                        <a href="product.php?edit=<?= $row['id']; ?>" class="btn btn-warning">Edit</a>
-                        <a href="?delete=<?= $row['id']; ?>" class="btn btn-danger">Delete</a>
+                        <a href="product.php?edit=<?= $row['id']; ?>" class="btn btn-warning"><?= __('Edit') ?></a>
+                        <a href="?delete=<?= $row['id']; ?>" class="btn btn-danger"><?= __('Delete') ?></a>
                     </td>
                 </tr>
             <?php endforeach; ?>
         </table>
-        <a href="product.php" class="btn btn-primary">Add</a>
-        <a href="?logout" class="btn btn-primary">Log out</a>
+        <a href="product.php" class="btn btn-primary"><?= __('Add') ?></a>
+        <a href="orders.php" class="btn btn-primary"><?= __('Orders') ?></a>
+        <a href="?logout" class="btn btn-primary"><?= __('Log out') ?></a>
 
 </body>
 
