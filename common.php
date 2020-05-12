@@ -6,6 +6,8 @@ require_once 'config.php';
 
 $connection = new PDO(HOST, USERNAME, PASSWORD);
 
+$implode = implode(',', $_SESSION['cart']);
+
 function __($input)
 {
     $translations = [];
@@ -13,7 +15,7 @@ function __($input)
     return isset($translations[$input]) ? $translations[$input] : $input;
 };
 
-function inputFilter($data)
+function sanitize($data)
 {
     $data = trim($data);
     $data = stripslashes($data);

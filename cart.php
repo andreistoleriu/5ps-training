@@ -1,117 +1,67 @@
 <?php
 
 require_once 'common.php';
-require_once 'config.php';
 
-if (isset($_GET['delete'])) {
-    foreach ($_SESSION['cart'] as $key => $value) {
-        if ($value == $_GET['delete']) {
-            unset($_SESSION['cart'][$key]);
-        }
+if (isset($_GET['id'])) {
+    $key = array_search($_GET['id'], $_SESSION['cart']);
+    if ($key !== false) {
+        unset($_SESSION['cart'][$key]);
     }
     header('Location: cart.php');
-    exit();
-};
-
-$query = 'SELECT * FROM products WHERE id IN (' . implode(',', array_fill(0, count($_SESSION['cart']), '?')) . ')';
+    die();
+}
+$query =  'SELECT * 
+    FROM products 
+    WHERE id IN (' .$implode. ')';
 
 $stmt = $connection->prepare($query);
-if (!empty(array_values($_SESSION['cart']))) {
-    $res = $stmt->execute(array_values($_SESSION['cart']));
-} else {
-    $_SESSION['cart'] = [];
-};
+$res = $stmt->execute();
 $rows = $stmt->fetchAll();
 
-
-$priceQuery = 'SELECT SUM(price) as sum_value FROM products WHERE id IN (' . implode(',', array_fill(0, count($_SESSION['cart']), '?')) . ')';
-$priceStmt = $connection->prepare($priceQuery);
-$priceRes = $priceStmt->execute(array_values($_SESSION['cart']));
-$priceSum = $priceStmt->fetch();
-
-$timestamp = date("Y-m-d H:i:s");
-
+$timestamp = date('Y-m-d H:i:s');
 
 $name = $contactDetails = $comments = '';
-$nameErr = $contactDetailsErr = $cartErr = '';
+$errors = [];
+$total = 0;
 
 if (isset($_POST['checkout'])) {
 
     if (empty($_POST['name'])) {
-        $nameErr = __('Name is required');
+        $errors['name'][] = __('Name is required');
     } else {
-        $name = inputFilter($_POST['name']);
+        $name = $_POST['name'];
     }
     if (empty($_POST['contactDetails'])) {
-        $contactDetailsErr = __('Contact details are required');
+        $errors['contactDetails'][] = __('Contact details are required');
     } else {
-        $contactDetails = inputFilter($_POST['contactDetails']);
+        $contactDetails = $_POST['contactDetails'];
     }
+    $comments = $_POST['comments'];
 
-    $comments = inputFilter($_POST['comments']);
+    if (!$errors) {
 
-    if (empty($_SESSION['cart'])) {
-        $cartErr = __('Cart is empty');
-    }
-}
+        $to = SHOPMANAGER;
+        $subject = 'Order number #';
+        $headers = 'From: example@gmail.com' . "\r\n" .
+            'MIME-Version: 1.0' . "r\n" .
+            'Content-Type: text/html; charset=utf-8';        
+        include 'message.php';
 
-if (isset($_POST['checkout']) && empty($nameErr) && empty($contactDetailsErr) && empty($cartErr)) {
-
-    $to = SHOPMANAGER;
-    $subject = 'Order number #';
-    $headers = 'From: example@gmail.com' . "\r\n" .
-        'MIME-Version: 1.0' . "r\n" .
-        'Content-Type: text/html; charset=utf-8';
-
-    $message = '
-        <html>
-            <head>
-                <title>' . __('Order number ####') . '</title>
-            </head>
-            <body>
-                <p>' . __('Hello. A new order from ') . ' ' . ($name) . '</p>
-                <p>' . __('Please find the order details below:') . '</p>
-                <table border="1" cellpadding="2">
-            <tr>
-                <th>' . __('Name') . ' </th>
-                <th>' . __('Description') . ' </th>
-                <th>' . __('Price') . ' </th>
-            </tr> ';
-
-    foreach ($rows as $row) {
-        $message .= ' <tr>
-                        <td>' . $row['title'] . '</td>
-                        <td>' . $row['description'] . '</td>
-                        <td>' . $row['price'] . '</td>
-                    </tr> ';
-    }
-    $message .= ' 
-                     <tr>
-                        <td colspan="2" align="middle"><b>' . __('Total') . '</b></td>
-                        <td><b>' . $priceSum['sum_value'] . '</b></td>
-                    </tr>
-                    </table>
-                <p> ' . __('Contact details:') . ' ' . $contactDetails . '</p>
-                <p> ' . __('Comments:') . ' ' . $comments . '</p>
-            </body>
-        </html> ';
-
-
-    $query = 'INSERT INTO orders(name, contact_details, created_at) VALUES (?, ?, ?)';
-    $stmt = $connection->prepare($query);
-    $stmt->execute([$name, $contactDetails, $timestamp]);
-    $last_id = $connection->lastInsertId();
-
-    foreach ($_SESSION['cart'] as $product) {
-        $query = 'INSERT INTO product_order(order_id ,product_id, created_at) VALUES (?, ?, ?)';
+        $query = 'INSERT INTO orders(name, contact_details, created_at) VALUES (?, ?, ?)';
         $stmt = $connection->prepare($query);
-        $stmt->execute([$last_id, $product, $timestamp]);
-    }
+        $stmt->execute([$name, $contactDetails, $timestamp]);
+        $lastId = $connection->lastInsertId();
 
-    if (mail($to, $subject, $message, $headers)) {
+        foreach ($_SESSION['cart'] as $product) {
+            $query = 'INSERT INTO product_order(order_id ,product_id, created_at) VALUES (?, ?, ?)';
+            $stmt = $connection->prepare($query);
+            $stmt->execute([$lastId, $product, $timestamp]);
+        }
+
+        mail($to, $subject, $message, $headers);
         $_SESSION['cart'] = [];
-        header('refresh:5;url=cart.php');
-        echo '<div class="p-3 mb-2 bg-primary text-white">The email has been sent. Thank you' . ' '  . $name . '</div>';
+        header('Location: cart.php?sent=1');
+        die();
     }
 }
 
@@ -128,45 +78,54 @@ if (isset($_POST['checkout']) && empty($nameErr) && empty($contactDetailsErr) &&
 
 <body>
     <div class="container">
+
         <?php if (empty($_SESSION['cart'])) : ?>
-            <h2 class="text-danger"> <?= $cartErr ?><h2>
-                <?php endif; ?>
+            <?php if (isset($_GET['sent'])) : ?>
+                <p><?= sanitize(__('Your order was sent. Thank you!')); ?></p>
+            <?php endif; ?>
+            <h2 class="text-danger"> <?= sanitize(__('Cart is empty')) ?><h2>
+        <?php else: ?>
                 <table class="table">
                     <thead class="thead-dark">
-                        <tr>
-                            <th scope="col"></th>
-                            <th scope="col"><?= __('Title') ?></th>
-                            <th scope="col"><?= __('Description') ?></th>
-                            <th scope="col"><?= __('Price') ?></th>
-                            <th scope="col"><?= __('Action') ?></th>
-                        </tr>
-                    </thead>
-                    <?php foreach ($rows as $row) : ?>
-                        <tr>
-                            <td><img src="img/<?= $row['image'] ?>" style="width: 200px" alt=""></td>
-                            <td><?= $row['title'] ?></td>
-                            <td><?= $row['description'] ?></td>
-                            <td>$<?= $row['price'] ?></td>
-                            <td><a href="?delete=<?= $row['id'] ?>"><?= __('Delete') ?></a></td>
-                        </tr>
-                    <?php endforeach; ?>
-                    <tr>
-                        <td colspan="3"><b><?= __('Total') ?></b></td>
-                        <td colspan="2"><b>$<?= $priceSum['sum_value'] ?></b></td>
-                    </tr>
-                </table>
-                <form class="form-group" method="POST" action="cart.php">
-                    <label for="name"><?= __('Name') ?></label>
-                    <input type="text" name="name" placeholder="<?= __('Insert your name') ?>" class="form-control" value="<?= $name ?>">
-                    <p class="text-danger"> <?= $nameErr; ?></p>
-                    <label for="contactDetails"><?= __('Contact details') ?></label>
-                    <textarea rows="2" cols="30" name="contactDetails" placeholder="<?= __('Insert your contact details') ?>" class="form-control" value="<?= $contactDetails ?>"></textarea>
-                    <p class="text-danger"> <?= $contactDetailsErr ?></p>
-                    <label for="comments"><?= __('Comments') ?></label>
-                    <textarea rows="4" cols="30" name="comments" placeholder="<?= __('Insert comments') ?>" class="form-control" value="<?= $comments ?>"></textarea>
-                    <input type="submit" class="btn btn-primary" name="checkout" value="<?= __('Checkout') ?>"></button>
-                </form>
-                <a href="index.php" class="btn btn-warning"><?= __('Go to index') ?></a>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col"><?= sanitize(__('Title')) ?></th>
+                    <th scope="col"><?= sanitize(__('Description')) ?></th>
+                    <th scope="col"><?= sanitize(__('Price')) ?></th>
+                    <th scope="col"><?= sanitize(__('Action')) ?></th>
+                </tr>
+            </thead>
+            <?php foreach ($rows as $row) : ?>
+                <tr>
+                    <td><img src="img/<?= sanitize($row['image']) ?>" style="width: 200px" alt=""></td>
+                    <td><?= sanitize($row['title']) ?></td>
+                    <td><?= sanitize($row['description']) ?></td>
+                    <td>$<?= sanitize($row['price']) ?></td>
+                    <td><a href="?id=<?= sanitize($row['id']) ?>"><?= __('Delete') ?></a></td>
+                </tr>
+            <?php
+                $total += $row['price'];
+            endforeach; ?>
+            <tr>
+                <td colspan="3"><b><?= sanitize(__('Total')) ?></b></td>
+                <td colspan="2"><b>$<?= sanitize($total) ?></b></td>
+            </tr>
+        </table>
+        <form class="form-group" method="POST" action="cart.php">
+            <label for="name"><?= sanitize(__('Name')) ?></label>
+            <input type="text" name="name" placeholder="<?= sanitize(__('Insert your name')) ?>" class="form-control" value="<?= sanitize($name) ?>">
+            <?php $errorKey = 'name' ?>
+            <?php include 'errors.php' ?>
+            <label for="contactDetails"><?= sanitize(__('Contact details')) ?></label>
+            <textarea rows="2" cols="30" name="contactDetails" placeholder="<?= sanitize(__('Insert your contact details')) ?>" class="form-control" value="<?= sanitize($contactDetails) ?>"></textarea>
+            <?php $errorKey = 'contactDetails' ?>
+            <?php include 'errors.php' ?>
+            <label for="comments"><?= sanitize(__('Comments')) ?></label>
+            <textarea rows="4" cols="30" name="comments" placeholder="<?= sanitize(__('Insert comments')) ?>" class="form-control" value="<?= sanitize($comments) ?>"></textarea>
+            <input type="submit" class="btn btn-primary" name="checkout" value="<?= sanitize(__('Checkout')) ?>">
+        </form>
+        <?php endif; ?>
+        <a href="index.php" class="btn btn-warning"><?= sanitize(__('Go to index')) ?></a>
     </div>
 </body>
 
