@@ -6,9 +6,7 @@ if (empty($_SESSION['cart'])) {
     $query = 'SELECT * FROM products';
     $_SESSION['cart'] = [];
 } else {
-    $query =  'SELECT * 
-    FROM products
-     WHERE id NOT IN (' . $implode . ')';
+    $query = 'SELECT * FROM products WHERE id NOT IN (' . implode(',', array_fill(0, count($_SESSION['cart']), '?')) . ')';
 }
 
 if (isset($_POST['id']) && !in_array($_POST['id'], $_SESSION['cart'])) {
@@ -18,7 +16,7 @@ if (isset($_POST['id']) && !in_array($_POST['id'], $_SESSION['cart'])) {
 };
 
 $stmt = $connection->prepare($query);
-$res = $stmt->execute();
+$res = $stmt->execute(array_values($_SESSION['cart']));
 $rows = $stmt->fetchAll();
 
 ?>
@@ -58,7 +56,6 @@ $rows = $stmt->fetchAll();
                 </form>
             <?php endforeach; ?>
         </table>
-
         <a href="cart.php" class="btn btn-warning"><?= sanitize(__('Go to cart')) ?></a>
     </div>
 </body>
