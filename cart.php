@@ -85,7 +85,7 @@ if (isset($_POST['checkout'])) {
             <?php if (isset($_GET['sent'])) : ?>
                 <p><?= sanitize(__('Your order was sent. Thank you!')); ?></p>
             <?php endif; ?>
-            <h2 class="text-danger"> <?= sanitize(__('Cart is empty')) ?><h2>
+            <h2 class="text-warning"> <?= sanitize(__('Cart is empty')) ?><h2>
         <?php else: ?>
             <table class="table">
                 <thead class="thead-dark">

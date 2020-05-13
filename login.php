@@ -1,8 +1,9 @@
 <?php
+
 require_once 'common.php';
 
 $name = $password = '';
-$nameErr = $passwordErr = '';
+$errors = [];
 
 if (isset($_POST['login'])) {
 
@@ -11,30 +12,26 @@ if (isset($_POST['login'])) {
         $name = USER_ADMIN;
     } elseif (empty($_POST['username'])) {
 
-        $nameErr = __('Admin username required');
+        $errors['username'][] = __('Admin username required');
     } elseif ($_POST['username'] != USER_ADMIN) {
 
-        $nameErr = __('Invalid username');
+        $errors['username'][] = __('Invalid username');
     }
 
     if ($_POST['password'] === PASS_ADMIN) {
 
-        $password = PASS_ADMIN;
+        $password = $_POST['password'];
     } elseif (empty($_POST['password'])) {
 
-        $passwordErr = __('Admin password required');
+        $errors['password'][] = __('Admin password required');
     } elseif ($_POST['password'] != PASS_ADMIN) {
 
-        $passwordErr = __('Invalid password');
+        $errors['password'][] = __('Invalid password');
     }
-}
-
-if (isset($_POST['login'])) {
-
-    if ($_POST['username'] === USER_ADMIN and $_POST['password'] === PASS_ADMIN) {
-
+    if(!$errors) {
         $_SESSION['authenticated'] = true;
         header('Location: products.php');
+        die();
     }
 }
 
@@ -52,16 +49,17 @@ if (isset($_POST['login'])) {
 <body>
     <div class="container" style="max-width: 30vw; margin-top: 50px;">
         <form class="form-group" method="POST">
-            <label for="username"><?= __('Username:') ?></label>
-            <input type="text" name="username" placeholder="<?= __('Insert username') ?>" class="form-control" value="<?= inputFilter($name) ?>">
-            <p class="text-danger"> <?= $nameErr; ?></p>
-            <label for="password"><?= __('Password:') ?></label>
-            <input type="password" name="password" placeholder="<?= __('Insert password') ?>" class="form-control" value="<?= inputFilter($password) ?>">
-            <p class=" text-danger"> <?= $passwordErr; ?></p>
-            <input type="submit" class="btn btn-primary" name="login" value="<?= __('Login') ?>"></button>
-
+            <label for="username"><?= sanitize(__('Username:')) ?></label>
+            <input type="text" name="username" placeholder="<?= sanitize(__('Insert username')) ?>" class="form-control" value="<?= sanitize($name) ?>">
+            <?php $errorKey = 'username' ?>
+            <?php include 'errors.php' ?>
+            <label for="password"><?= sanitize(__('Password:')) ?></label>
+            <input type="password" name="password" placeholder="<?= sanitize(__('Insert password')) ?>" class="form-control" value="<?= sanitize($password) ?>">
+            <?php $errorKey = 'password' ?>
+            <?php include 'errors.php' ?>
+            <input type="submit" class="btn btn-primary" name="login" value="<?= sanitize(__('Login')) ?>"></button>
         </form>
+    </div>
 </body>
-</div>
 
 </html>
