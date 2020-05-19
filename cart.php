@@ -46,7 +46,7 @@ if (isset($_POST['checkout'])) {
             'MIME-Version: 1.0' . "r\n" .
             'Content-Type: text/html; charset=utf-8'));
         ob_start();
-        include('message.php');
+        include 'message.php';
         $message = ob_get_contents();
         ob_end_clean();
       
