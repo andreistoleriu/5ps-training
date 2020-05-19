@@ -2,8 +2,8 @@
 
 require_once 'common.php';
 
-if (isset($_GET['id'])) {
-    $key = array_search($_GET['id'], $_SESSION['cart']);
+if (isset($_POST['id'])) {
+    $key = array_search($_POST['id'], $_SESSION['cart']);
     if ($key !== false) {
         unset($_SESSION['cart'][$key]);
     }
@@ -11,12 +11,11 @@ if (isset($_GET['id'])) {
     die();
 }
 
-if(count($_SESSION['cart'])) {
+if (count($_SESSION['cart'])) {
     $query = 'SELECT * FROM products WHERE id IN (' . implode(',', array_fill(0, count($_SESSION['cart']), '?')) . ')';
 } else {
-    $query = 'SELECT * FROM products';
+    $query = '';
 }
-
 $stmt = $connection->prepare($query);
 $res = $stmt->execute(array_values($_SESSION['cart']));
 $rows = $stmt->fetchAll();
@@ -28,7 +27,6 @@ $errors = [];
 $total = 0;
 
 if (isset($_POST['checkout'])) {
-
     if (empty($_POST['name'])) {
         $errors['name'][] = __('Name is required');
     } else {
@@ -42,21 +40,23 @@ if (isset($_POST['checkout'])) {
     $comments = $_POST['comments'];
 
     if (!$errors) {
-
         $to = SHOPMANAGER;
-        $subject = 'Order number #';
-        $headers = 'From: example@gmail.com' . "\r\n" .
+        $subject = sanitize(__('Order number #'));
+        $headers = sanitize(__('From: example@gmail.com' . "\r\n" .
             'MIME-Version: 1.0' . "r\n" .
-            'Content-Type: text/html; charset=utf-8';        
-        include 'message.php';
-
+            'Content-Type: text/html; charset=utf-8'));
+        ob_start();
+        include('message.php');
+        $message = ob_get_contents();
+        ob_end_clean();
+      
         $query = 'INSERT INTO orders(name, contact_details, created_at) VALUES (?, ?, ?)';
         $stmt = $connection->prepare($query);
         $stmt->execute([$name, $contactDetails, $timestamp]);
         $lastId = $connection->lastInsertId();
 
         foreach ($_SESSION['cart'] as $product) {
-            $query = 'INSERT INTO product_order(order_id ,product_id, created_at) VALUES (?, ?, ?)';
+            $query = 'INSERT INTO product_order(order_id, product_id, created_at) VALUES (?, ?, ?)';
             $stmt = $connection->prepare($query);
             $stmt->execute([$lastId, $product, $timestamp]);
         }
@@ -74,7 +74,7 @@ if (isset($_POST['checkout'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= __('Cart') ?></title>
+    <title><?= sanitize(__('Cart')) ?></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
 </head>
@@ -83,10 +83,10 @@ if (isset($_POST['checkout'])) {
     <div class="container">
         <?php if (empty($_SESSION['cart'])) : ?>
             <?php if (isset($_GET['sent'])) : ?>
-                <p><?= sanitize(__('Your order was sent. Thank you!')); ?></p>
+                <h2 class="text-primary"><?= sanitize(__('Your order was sent. Thank you!')); ?></h2>
             <?php endif; ?>
             <h2 class="text-warning"> <?= sanitize(__('Cart is empty')) ?><h2>
-        <?php else: ?>
+        <?php else : ?>
             <table class="table">
                 <thead class="thead-dark">
                     <tr>
@@ -98,13 +98,16 @@ if (isset($_POST['checkout'])) {
                     </tr>
                 </thead>
                 <?php foreach ($rows as $row) : ?>
-                    <tr>
-                        <td><img src="img/<?= sanitize($row['image']) ?>" style="width: 200px" alt=""></td>
-                        <td><?= sanitize($row['title']) ?></td>
-                        <td><?= sanitize($row['description']) ?></td>
-                        <td>$<?= sanitize($row['price']) ?></td>
-                        <td><a href="?id=<?= sanitize($row['id']) ?>"><?= __('Delete') ?></a></td>
-                    </tr>
+                    <form method="post" action="cart.php">
+                        <tr>
+                            <td><img src="img/<?= sanitize($row['image']) ?>" style="width: 200px" alt=""></td>
+                            <td><?= sanitize($row['title']) ?></td>
+                            <td><?= sanitize($row['description']) ?></td>
+                            <td>$<?= sanitize($row['price']) ?></td>
+                            <td><input type="submit" name="delete" class="btn btn-primary" value="<?= sanitize(__('Delete')) ?>" /></td>
+                            <td><input type="hidden" name="id" value="<?= sanitize($row['id']) ?>" /></td>
+                        </tr>
+                    </form>
                 <?php
                 $total += $row['price'];
                 endforeach; ?>

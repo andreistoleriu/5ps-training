@@ -40,7 +40,7 @@ $order = $stmt->fetchAll();
         <p><?= sanitize(__('No orders')) ?></p>
     <?php else : ?>
 
-        <p><?=sanitize( __('Order')) . ' ' . $order[0]['order_id'] ?></p>
+        <p><?=sanitize(__('Order')) . ' ' . $order[0]['order_id'] ?></p>
         <p><?= sanitize(__('Name')) . ': ' . $order[0]['name'] ?></p>
         <p><?= sanitize(__('Email')) . ': ' . $order[0]['contact_details'] ?></p>
 

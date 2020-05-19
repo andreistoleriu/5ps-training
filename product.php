@@ -23,7 +23,6 @@ if (isset($_GET['edit'])) {
 }
 
 if (isset($_POST['save']) || isset($_POST['edit'])) {
-
     if (!strlen($_POST['title'])) {
         $errors['title'][] = __('Title is required');
     } else {

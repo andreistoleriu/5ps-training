@@ -6,29 +6,22 @@ $name = $password = '';
 $errors = [];
 
 if (isset($_POST['login'])) {
-
     if ($_POST['username'] === USER_ADMIN) {
-
         $name = USER_ADMIN;
     } elseif (empty($_POST['username'])) {
-
         $errors['username'][] = __('Admin username required');
     } elseif ($_POST['username'] != USER_ADMIN) {
-
         $errors['username'][] = __('Invalid username');
     }
 
     if ($_POST['password'] === PASS_ADMIN) {
-
         $password = $_POST['password'];
     } elseif (empty($_POST['password'])) {
-
         $errors['password'][] = __('Admin password required');
     } elseif ($_POST['password'] != PASS_ADMIN) {
-
         $errors['password'][] = __('Invalid password');
     }
-    if(!$errors) {
+    if (!$errors) {
         $_SESSION['authenticated'] = true;
         header('Location: products.php');
         die();

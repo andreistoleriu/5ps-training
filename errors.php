@@ -1,5 +1,5 @@
 <?php if (isset($errors[$errorKey])) : ?>
         <?php foreach ($errors[$errorKey] as $error) : ?>
-            <p class="text-danger"><?= $error ?></p>
+            <p class="text-danger"><?= sanitize($error) ?></p>
         <?php endforeach ?>
 <?php endif ?>
