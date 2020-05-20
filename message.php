@@ -1,34 +1,34 @@
 <html>
 
 <head>
-    <title><?= sanitize(__('Order number ####')) ?></title>
+    <title><?= __('Order number ####') ?></title>
 </head>
 
 <body>
-    <p><?= sanitize(__('Hello. A new order from ')) . ' ' . sanitize($name) ?></p>
-        <p><?=sanitize(__('Please find the order details below:')) ?></p>
+    <p><?= __('Hello. A new order from ') . ' ' . $name ?></p>
+        <p><?=__('Please find the order details below:') ?></p>
             <table border="1" cellpadding="2">
                 <tr>
-                    <th><?=sanitize(__('Name')) ?></th>
-                    <th><?=sanitize(__('Description')) ?></th>
-                    <th><?=sanitize(__('Price')) ?></th>
+                    <th><?=__('Name') ?></th>
+                    <th><?=__('Description') ?></th>
+                    <th><?=__('Price') ?></th>
                 </tr>
             <?php foreach ($rows as $row) : ?>
                 <tr>
-                    <td><?=sanitize($row['title']) ?></td>
-                    <td><?=sanitize($row['description']) ?></td>
-                    <td><?=sanitize($row['price']) ?></td>
+                    <td><?=$row['title'] ?></td>
+                    <td><?=$row['description'] ?></td>
+                    <td><?=$row['price'] ?></td>
                 </tr>
             <?php
             $total += $row['price'];
             endforeach; ?>
                 <tr>
-                    <td colspan="2" align="middle"><b><?=sanitize(__('Total')) ?></b></td>
-                    <td colspan="2"><b>$<?=sanitize($total) ?></b></td>
+                    <td colspan="2" align="middle"><b><?=__('Total') ?></b></td>
+                    <td colspan="2"><b>$<?=$total ?></b></td>
                 </tr>
             </table>
-            <p> <?=sanitize(__('Contact details:')) . ' ' .sanitize($contactDetails) ?></p>
-            <p> <?=sanitize(__('Comments:')) . ' ' .sanitize($comments) ?></p>
+            <p> <?=__('Contact details:') . ' ' .$contactDetails ?></p>
+            <p> <?=__('Comments:') . ' ' .$comments ?></p>
 </body>
 
 </html>
