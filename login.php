@@ -2,25 +2,24 @@
 
 require_once 'common.php';
 
-$name = $password = '';
+$name = '';
 $errors = [];
 
 if (isset($_POST['login'])) {
-    if ($_POST['username'] === USER_ADMIN) {
-        $name = USER_ADMIN;
-    } elseif (empty($_POST['username'])) {
-        $errors['username'][] = __('Admin username required');
-    } elseif ($_POST['username'] != USER_ADMIN) {
-        $errors['username'][] = __('Invalid username');
+    $name = strip_tags($_POST['username']);
+
+    if (!strlen(strip_tags($_POST['username']))) {
+        $errors['username'][] = __('Please insert a username');
+    } elseif (strip_tags($_POST['username']) !== USER_ADMIN) {
+        $errors['username'][] = __('Incorrect username');
     }
 
-    if ($_POST['password'] === PASS_ADMIN) {
-        $password = $_POST['password'];
-    } elseif (empty($_POST['password'])) {
-        $errors['password'][] = __('Admin password required');
-    } elseif ($_POST['password'] != PASS_ADMIN) {
-        $errors['password'][] = __('Invalid password');
+    if (!strlen(strip_tags($_POST['password']))) {
+        $errors['password'][] = __('Please insert a password');
+    } elseif (strip_tags($_POST['password']) !== PASS_ADMIN) {
+        $errors['password'][] = __('Wrong password');
     }
+
     if (!$errors) {
         $_SESSION['authenticated'] = true;
         header('Location: products.php');
