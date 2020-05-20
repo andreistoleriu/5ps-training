@@ -42,15 +42,15 @@ if (isset($_POST['login'])) {
 <body>
     <div class="container" style="max-width: 30vw; margin-top: 50px;">
         <form class="form-group" method="POST">
-            <label for="username"><?= sanitize(__('Username:')) ?></label>
-            <input type="text" name="username" placeholder="<?= sanitize(__('Insert username')) ?>" class="form-control" value="<?= sanitize($name) ?>">
+            <label for="username"><?= __('Username:') ?></label>
+            <input type="text" name="username" placeholder="<?= __('Insert username') ?>" class="form-control" value="<?= $name ?>">
             <?php $errorKey = 'username' ?>
             <?php include 'errors.php' ?>
-            <label for="password"><?= sanitize(__('Password:')) ?></label>
-            <input type="password" name="password" placeholder="<?= sanitize(__('Insert password')) ?>" class="form-control" value="<?= sanitize($password) ?>">
+            <label for="password"><?= __('Password:') ?></label>
+            <input type="password" name="password" placeholder="<?= __('Insert password') ?>" class="form-control" value="<?= $password ?>">
             <?php $errorKey = 'password' ?>
             <?php include 'errors.php' ?>
-            <input type="submit" class="btn btn-primary" name="login" value="<?= sanitize(__('Login')) ?>"></button>
+            <input type="submit" class="btn btn-primary" name="login" value="<?= __('Login') ?>"></button>
         </form>
     </div>
 </body>
