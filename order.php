@@ -1,11 +1,7 @@
 <?php
 
 require_once 'common.php';
-
-if (!$_SESSION['authenticated']) {
-    header('Location: login.php');
-    die();
-};
+require_once 'auth.php';
 
 $query = 'SELECT 
             orders.*,
@@ -30,48 +26,48 @@ $order = $stmt->fetchAll();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= sanitize(__('Orders page')) ?></title>
+    <title><?= __('Orders page') ?></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
 </head>
 
 <body>
     <?php if (empty($order)) : ?>
-        <p><?= sanitize(__('No orders')) ?></p>
+        <p><?= __('No orders') ?></p>
     <?php else : ?>
 
-        <p><?=sanitize(__('Order')) . ' ' . $order[0]['order_id'] ?></p>
-        <p><?= sanitize(__('Name')) . ': ' . $order[0]['name'] ?></p>
-        <p><?= sanitize(__('Email')) . ': ' . $order[0]['contact_details'] ?></p>
+        <p><?=__('Order') . ' ' . $order[0]['order_id'] ?></p>
+        <p><?= __('Name') . ': ' . $order[0]['name'] ?></p>
+        <p><?= __('Email') . ': ' . $order[0]['contact_details'] ?></p>
 
         <table class="table">
             <tr>
-                <th><?= sanitize(__('Product')) ?></th>
-                <th><?= sanitize(__('Image')) ?></th>
-                <th><?= sanitize(__('Title')) ?></th>
-                <th><?= sanitize(__('Description')) ?></th>
-                <th><?= sanitize(__('Price')) ?></th>
+                <th><?= __('Product') ?></th>
+                <th><?= __('Image') ?></th>
+                <th><?= __('Title') ?></th>
+                <th><?= __('Description') ?></th>
+                <th><?= __('Price') ?></th>
             </tr>
 
             <?php foreach ($order as $row) : ?>
                 <tr>
-                    <td><?= sanitize($row['product_id']) ?></td>
+                    <td><?= $row['product_id'] ?></td>
                     <td>
                         <?php if ($row['image']) : ?>
-                            <img alt="<?= sanitize(__('Product image')) ?>" src="img/<?= sanitize($row['image']) ?>" width="70px" height="70px">
+                            <img alt="<?= __('Product image') ?>" src="img/<?= $row['image'] ?>" width="70px" height="70px">
                         <?php else : ?>
-                            <p><?= sanitize(__('No image')) ?></p>
+                            <p><?= __('No image') ?></p>
                         <?php endif ?>
                     </td>
-                    <td><?= sanitize($row['title']) ?></td>
-                    <td><?= sanitize($row['description']) ?></td>
-                    <td><?= sanitize($row['price']) ?></td>
+                    <td><?= $row['title'] ?></td>
+                    <td><?= $row['description'] ?></td>
+                    <td><?= $row['price'] ?></td>
                 </tr>
             <?php endforeach ?>
         </table>
     <?php endif ?>
-    <span><a class="btn btn-primary" href="orders.php"><?= sanitize(__('Orders')) ?></a></span>
-    <span><a class="btn btn-primary" href="orders.php"><?= sanitize(__('Products')) ?></a></span>
+    <span><a class="btn btn-primary" href="orders.php"><?= __('Orders') ?></a></span>
+    <span><a class="btn btn-primary" href="orders.php"><?= __('Products') ?></a></span>
 </body>
 
 </html>

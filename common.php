@@ -12,11 +12,3 @@ function __($input)
 
     return isset($translations[$input]) ? $translations[$input] : $input;
 }
-
-function sanitize($data)
-{
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-}
