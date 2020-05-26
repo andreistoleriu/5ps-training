@@ -64,23 +64,23 @@ if (isset($_POST['save']) || isset($_POST['edit'])) {
     }
     if (!$errors) {
         if (isset($_POST['save'])) {
-            $query = 'INSERT INTO products(image, title, description, price) VALUES (?, ?, ?, ?)';
-            $stmt = $connection->prepare($query);
-            $stmt->execute([$image, $title, $description, $price]);
-            header('Location: product.php?success=1');
-            die();
-        }
-
-        if (isset($_POST['edit'])) {
             $title = strip_tags($_POST['title']);
             $description = strip_tags($_POST['description']);
             $price = strip_tags($_POST['price']);
             $image = $_FILES['image']['name'];
-    
+
+            $query = 'INSERT INTO products(image, title, description, price) VALUES (?, ?, ?, ?)';
+            $stmt = $connection->prepare($query);
+            $stmt->execute([$image, $title, $description, $price]);
+            header('Location: products.php');
+            die();
+        }
+
+        if (isset($_POST['edit'])) {
             $query = 'UPDATE products SET image = ?, title = ?, description = ?, price = ? WHERE products.id = ?';
             $stmt = $connection->prepare($query);
             $stmt->execute([$image, $title, $description, $price, $_GET['edit']]);
-            header('Location: products.php');
+            header('Location: product.php?success=1');
             die();
         }
     }

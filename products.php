@@ -4,8 +4,8 @@ require_once 'common.php';
 require_once 'auth.php';
 
 if (isset($_GET['logout'])) {
-    header('Location: login.php');
-    unset($_SESSION['authenticated']);
+    $_SESSION['authenticated'] = 0;
+    header('Location: index.php');
     die();
 }
 
