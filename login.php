@@ -2,21 +2,22 @@
 
 require_once 'common.php';
 
-$name = '';
+$name = $password = '';
 $errors = [];
 
 if (isset($_POST['login'])) {
     $name = strip_tags($_POST['username']);
+    $password = strip_tags($_POST['password']);
 
-    if (!strlen(strip_tags($_POST['username']))) {
+    if (!strlen($name)) {
         $errors['username'][] = __('Please insert a username');
-    } elseif (strip_tags($_POST['username']) !== USER_ADMIN) {
+    } elseif ($name !== USER_ADMIN) {
         $errors['username'][] = __('Incorrect username');
     }
 
-    if (!strlen(strip_tags($_POST['password']))) {
+    if (!strlen($password)) {
         $errors['password'][] = __('Please insert a password');
-    } elseif (strip_tags($_POST['password']) !== PASS_ADMIN) {
+    } elseif ($password !== PASS_ADMIN) {
         $errors['password'][] = __('Wrong password');
     }
 
