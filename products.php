@@ -55,18 +55,18 @@ $rows = $stmt->fetchAll();
             </thead>
             <?php foreach ($rows as $row) : ?>
                 <form method="post" action="products.php">
-                        <tr>
-                            <td><img src="img/<?= $row['image'] ?>" style="width: 200px" alt=""></td>
-                            <td><?= $row['title'] ?></td>
-                            <td><?= $row['description'] ?></td>
-                            <td>$<?= $row['price'] ?></td>
-                            <td>
-                                <a href="product.php?edit=<?= $row['id']; ?>" class="btn btn-warning"><?= __('Edit') ?></a>
-                                <input type="submit" name="delete" class="btn btn-danger" value="<?= __('Delete') ?>" />
-                            </td>
-                            <td><input type="hidden" name="id" value="<?= $row['id'] ?>" /></td>
-                        </tr>
-                    </form>
+                    <tr>
+                        <td><img src="img/<?= $row['image'] ?>" style="width: 200px" alt=""></td>
+                        <td><?= $row['title'] ?></td>
+                        <td><?= $row['description'] ?></td>
+                        <td>$<?= $row['price'] ?></td>
+                        <td>
+                            <a href="product.php?edit=<?= $row['id']; ?>" class="btn btn-warning"><?= __('Edit') ?></a>
+                            <input type="submit" name="delete" class="btn btn-danger" value="<?= __('Delete') ?>" />
+                        </td>
+                        <td><input type="hidden" name="id" value="<?= $row['id'] ?>" /></td>
+                    </tr>
+                </form>
             <?php endforeach; ?>
         </table>
         <hr style="background-color: black; height: 1px;">
