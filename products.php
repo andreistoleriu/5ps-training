@@ -10,11 +10,6 @@ if (isset($_GET['logout'])) {
 }
 
 if (isset($_POST['delete'])) {
-    $query = 'SELECT * FROM products WHERE id = ?';
-    $stmt = $connection->prepare($query);
-    $res = $stmt->execute([$_POST['id']]);
-    $row = $stmt->fetch();
-
     $deleteQuery = 'DELETE FROM products WHERE id = ?';
     $stmt = $connection->prepare($deleteQuery);
     $stmt->execute([$_POST['id']]);
@@ -41,7 +36,6 @@ $rows = $stmt->fetchAll();
 </head>
 
 <body>
-
     <div class="container">
         <table class="table">
             <thead class="thead-dark">
@@ -54,7 +48,7 @@ $rows = $stmt->fetchAll();
                 </tr>
             </thead>
             <?php foreach ($rows as $row) : ?>
-                <form method="post" action="products.php">
+                <form method="post" action="products.php?id=<?= $row['id']; ?>">
                     <tr>
                         <td><img src="img/<?= $row['image'] ?>" style="width: 200px" alt=""></td>
                         <td><?= $row['title'] ?></td>
