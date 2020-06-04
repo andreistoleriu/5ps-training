@@ -80,7 +80,7 @@ if (isset($_POST['save']) || isset($_POST['edit'])) {
             $query = 'UPDATE products SET image = ?, title = ?, description = ?, price = ? WHERE products.id = ?';
             $stmt = $connection->prepare($query);
             $stmt->execute([$image, $title, $description, $price, $_GET['edit']]);
-            header('Location: product.php?success=1');
+            header('Location: products.php');
             die();
         }
     }
@@ -99,9 +99,6 @@ if (isset($_POST['save']) || isset($_POST['edit'])) {
 <body>
     <div class="container" style="max-width: 30%; margin-top: 100px">
         <form method="POST" class="form-group" enctype="multipart/form-data">
-            <?php if (isset($_GET['success'])) : ?>
-                <p class="text-primary"><?= __('Product updated') ?></p>
-            <?php endif ?>
             <input type="text" name="title" placeholder="<?= __('Title') ?>" class="form-control" value="<?= $title ?>"><br />
             <?php $errorKey = 'title' ?>
             <?php include 'errors.php' ?>
