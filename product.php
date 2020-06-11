@@ -12,10 +12,14 @@ if (isset($_GET['edit']) && $_GET['edit']) {
     $res = $stmt->execute([$_GET['edit']]);
     $row = $stmt->fetch();
 
-    $title = $row['title'];
-    $description = $row['description'];
-    $price = $row['price'];
-    $image = $row['image'];
+    if (!$row) {
+        $errors['edit'][] = __('Product no longer available in the database!');
+    } else {
+        $title = $row['title'];
+        $description = $row['description'];
+        $price = $row['price'];
+        $image = $row['image'];
+    }
 }
 
 if (isset($_POST['save']) || isset($_POST['edit'])) {
@@ -101,6 +105,11 @@ if (isset($_POST['save']) || isset($_POST['edit'])) {
 
 <body>
     <div class="container" style="max-width: 30%; margin-top: 100px">
+        <?php if (isset($errors['edit'])) : ?>
+            <?php $errorKey = 'edit' ?>
+            <?php include 'errors.php' ?>
+            <a href="products.php" class="btn btn-warning"><?= __('Products') ?></a>
+        <?php else : ?>
         <form method="POST" class="form-group" enctype="multipart/form-data">
             <input type="text" name="title" placeholder="<?= __('Title') ?>" class="form-control" value="<?= $title ?>"><br />
             <?php $errorKey = 'title' ?>
@@ -121,6 +130,7 @@ if (isset($_POST['save']) || isset($_POST['edit'])) {
             <?php endif; ?>
             <span><a href="products.php" class="btn btn-warning"><?= __('Products') ?></a></span>
         </form>
+        <?php endif ?>
     </div>
 </body>
 
