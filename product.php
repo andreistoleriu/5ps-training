@@ -130,7 +130,7 @@ if (isset($_POST['save']) || isset($_POST['edit'])) {
             <?php endif; ?>
             <span><a href="products.php" class="btn btn-warning"><?= __('Products') ?></a></span>
         </form>
-        <?php endif ?>
+        <?php endif; ?>
     </div>
 </body>
 
