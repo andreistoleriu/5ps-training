@@ -110,26 +110,26 @@ if (isset($_POST['save']) || isset($_POST['edit'])) {
             <?php include 'errors.php' ?>
             <a href="products.php" class="btn btn-warning"><?= __('Products') ?></a>
         <?php else : ?>
-        <form method="POST" class="form-group" enctype="multipart/form-data">
-            <input type="text" name="title" placeholder="<?= __('Title') ?>" class="form-control" value="<?= $title ?>"><br />
-            <?php $errorKey = 'title' ?>
-            <?php include 'errors.php' ?>
-            <input type="text" name="description" placeholder="<?= __('Description') ?>" class="form-control" value="<?= $description ?>"><br />
-            <?php $errorKey = 'description' ?>
-            <?php include 'errors.php' ?>
-            <input type="number" name="price" placeholder="<?= __('Price') ?>" class="form-control" value="<?= $price ?>"><br />
-            <?php $errorKey = 'price' ?>
-            <?php include 'errors.php' ?>
-            <input type="file" name="image" class="form-control" value="<?= $image ?>"><br />
-            <?php $errorKey = 'image' ?>
-            <?php include 'errors.php' ?>
-            <?php if (isset($_GET['edit'])) : ?>
-                <input type="submit" class="btn btn-primary" name="edit" value="<?= __('Update') ?>"></button>
-            <?php else : ?>
-                <input type="submit" class="btn btn-primary" name="save" value="<?= __('Save') ?>"></button>
-            <?php endif; ?>
-            <span><a href="products.php" class="btn btn-warning"><?= __('Products') ?></a></span>
-        </form>
+            <form method="POST" class="form-group" enctype="multipart/form-data">
+                <input type="text" name="title" placeholder="<?= __('Title') ?>" class="form-control" value="<?= $title ?>"><br />
+                <?php $errorKey = 'title' ?>
+                <?php include 'errors.php' ?>
+                <input type="text" name="description" placeholder="<?= __('Description') ?>" class="form-control" value="<?= $description ?>"><br />
+                <?php $errorKey = 'description' ?>
+                <?php include 'errors.php' ?>
+                <input type="number" name="price" placeholder="<?= __('Price') ?>" class="form-control" value="<?= $price ?>"><br />
+                <?php $errorKey = 'price' ?>
+                <?php include 'errors.php' ?>
+                <input type="file" name="image" class="form-control" value="<?= $image ?>"><br />
+                <?php $errorKey = 'image' ?>
+                <?php include 'errors.php' ?>
+                <?php if (isset($_GET['edit'])) : ?>
+                    <input type="submit" class="btn btn-primary" name="edit" value="<?= __('Update') ?>"></button>
+                <?php else : ?>
+                    <input type="submit" class="btn btn-primary" name="save" value="<?= __('Save') ?>"></button>
+                <?php endif; ?>
+                <span><a href="products.php" class="btn btn-warning"><?= __('Products') ?></a></span>
+            </form>
         <?php endif; ?>
     </div>
 </body>
