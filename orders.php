@@ -30,30 +30,34 @@ $orders = $stmt->fetchAll();
 </head>
 
 <body>
-    <?php if (empty($orders)) : ?>
-        <p><?= __('No orders') ?></p>
-    <?php else : ?>
-        <table class="table">
-            <tr>
-                <th><?= __('ID') ?>
-                <th><?= __('Name') ?>
-                <th><?= __('Total price') ?>
-                <th><?= __('Order details') ?>
-                <th><?= __('Created at') ?>
-            </tr>
-
-            <?php foreach ($orders as $order) : ?>
-                <tr>
-                    <td><?= $order['id'] ?></td>
-                    <td><?= $order['name'] ?></td>
-                    <td>$<?= $order['price'] ?></td>
-                    <td><a href="order.php?id=<?= $order['id'] ?>"><?= __('View') ?></a></td>
-                    <td><?= $order['created_at'] ?></td>
-                </tr>
-            <?php endforeach ?>
-        </table>
-    <?php endif ?>
-    <span><a class="btn btn-primary" href="products.php"><?= __('Products') ?></a></span>
+    <div class="container">
+        <?php if (empty($orders)) : ?>
+            <p><?= __('No orders') ?></p>
+        <?php else : ?>
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th><?= __('ID') ?>
+                        <th><?= __('Name') ?>
+                        <th><?= __('Total price') ?>
+                        <th><?= __('Order details') ?>
+                        <th><?= __('Created at') ?>
+                    </tr>
+                </thead>
+                    
+                <?php foreach ($orders as $order) : ?>
+                    <tr>
+                        <td><?= $order['id'] ?></td>
+                        <td><?= $order['name'] ?></td>
+                        <td>$<?= $order['price'] ?></td>
+                        <td><a href="order.php?id=<?= $order['id'] ?>"><?= __('View') ?></a></td>
+                        <td><?= $order['created_at'] ?></td>
+                    </tr>
+                <?php endforeach ?>
+            </table>
+        <?php endif ?>
+        <span><a class="btn btn-primary" href="products.php"><?= __('Products') ?></a></span>
+    </div>
 </body>
 
 </html>

@@ -39,49 +39,53 @@ if (!$order) {
 </head>
 
 <body>
-    <?php if (isset($errors['order'])) : ?>
-        <?php $errorKey = 'order' ?>
-        <?php include 'errors.php' ?>
-    <?php else : ?>
+    <div class="container">
+        <?php if (isset($errors['order'])) : ?>
+            <?php $errorKey = 'order' ?>
+            <?php include 'errors.php' ?>
+        <?php else : ?>
 
-        <p><?=__('Order') . ' ' . $order[0]['order_id'] ?></p>
-        <p><?= __('Name') . ': ' . $order[0]['name'] ?></p>
-        <p><?= __('Email') . ': ' . $order[0]['contact_details'] ?></p>
+            <p><?=__('Order') . ' ' . $order[0]['order_id'] ?></p>
+            <p><?= __('Name') . ': ' . $order[0]['name'] ?></p>
+            <p><?= __('Email') . ': ' . $order[0]['contact_details'] ?></p>
 
-        <table class="table">
-            <tr>
-                <th><?= __('Product') ?></th>
-                <th><?= __('Image') ?></th>
-                <th><?= __('Title') ?></th>
-                <th><?= __('Description') ?></th>
-                <th><?= __('Price') ?></th>
-            </tr>
-
-            <?php foreach ($order as $row) : ?>
-                <tr>
-                    <td><?= $row['product_id'] ?></td>
-                    <td>
-                        <?php if ($row['image']) : ?>
-                            <img alt="<?= __('Product image') ?>" src="img/<?= $row['image'] ?>" width="150px">
-                        <?php else : ?>
-                            <p><?= __('No image') ?></p>
-                        <?php endif ?>
-                    </td>
-                    <td><?= $row['title'] ?></td>
-                    <td><?= $row['description'] ?></td>
-                    <td>$<?= $row['price'] ?></td>
-                </tr>
-            <?php
-                $total += $row['price'];
-                endforeach; ?>
+            <table class="table">
+                <thead class="thead-dark">
                     <tr>
-                        <td colspan="4" align="middle"><b><?= __('Total') ?></b></td>
-                        <td colspan="1"><b>$<?= $total ?></b></td>
+                        <th><?= __('Product ID') ?></th>
+                        <th><?= __('Image') ?></th>
+                        <th><?= __('Title') ?></th>
+                        <th><?= __('Description') ?></th>
+                        <th><?= __('Price') ?></th>
                     </tr>
-        </table>
-    <?php endif ?>
-    <span><a class="btn btn-primary" href="orders.php"><?= __('Orders') ?></a></span>
-    <span><a class="btn btn-primary" href="orders.php"><?= __('Products') ?></a></span>
+                </thead>
+
+                <?php foreach ($order as $row) : ?>
+                    <tr>
+                        <td><?= $row['product_id'] ?></td>
+                        <td>
+                            <?php if ($row['image']) : ?>
+                                <img alt="<?= __('Product image') ?>" src="img/<?= $row['image'] ?>" width="150px">
+                            <?php else : ?>
+                                <p><?= __('No image') ?></p>
+                            <?php endif ?>
+                        </td>
+                        <td><?= $row['title'] ?></td>
+                        <td><?= $row['description'] ?></td>
+                        <td>$<?= $row['price'] ?></td>
+                    </tr>
+                <?php
+                    $total += $row['price'];
+                    endforeach; ?>
+                        <tr>
+                            <td colspan="4" align="middle"><b><?= __('Total') ?></b></td>
+                            <td colspan="1"><b>$<?= $total ?></b></td>
+                        </tr>
+            </table>
+        <?php endif ?>
+        <span><a class="btn btn-primary" href="orders.php"><?= __('Orders') ?></a></span>
+        <span><a class="btn btn-primary" href="orders.php"><?= __('Products') ?></a></span>
+    </div>
 </body>
 
 </html>
