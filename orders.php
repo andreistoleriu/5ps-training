@@ -4,14 +4,14 @@ require_once 'common.php';
 require_once 'auth.php';
 
 $query = 'SELECT 
-orders.*, 
-SUM(products.price) AS price
-FROM orders
-JOIN product_order
-ON product_order.order_id = orders.id
-JOIN products
-ON products.id = product_order.product_id
-GROUP BY orders.id';
+        orders.*, 
+        SUM(products.price) AS price
+        FROM orders
+        JOIN product_order
+        ON product_order.order_id = orders.id
+        JOIN products
+        ON products.id = product_order.product_id
+        GROUP BY orders.id';
 
 $stmt = $connection->prepare($query);
 $res = $stmt->execute();
@@ -37,7 +37,7 @@ $orders = $stmt->fetchAll();
             <tr>
                 <th><?= __('ID') ?>
                 <th><?= __('Name') ?>
-                <th><?= __('Price') ?>
+                <th><?= __('Total price') ?>
                 <th><?= __('Order details') ?>
                 <th><?= __('Created at') ?>
             </tr>
@@ -46,7 +46,7 @@ $orders = $stmt->fetchAll();
                 <tr>
                     <td><?= $order['id'] ?></td>
                     <td><?= $order['name'] ?></td>
-                    <td><?= $order['price'] ?></td>
+                    <td>$<?= $order['price'] ?></td>
                     <td><a href="order.php?id=<?= $order['id'] ?>"><?= __('View') ?></a></td>
                     <td><?= $order['created_at'] ?></td>
                 </tr>
