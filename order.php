@@ -68,7 +68,7 @@ if (!$order) {
                                 <img alt="<?= __('Product image') ?>" src="img/<?= $row['image'] ?>" width="150px">
                             <?php else : ?>
                                 <p><?= __('No image') ?></p>
-                            <?php endif ?>
+                            <?php endif; ?>
                         </td>
                         <td><?= $row['title'] ?></td>
                         <td><?= $row['description'] ?></td>
@@ -76,13 +76,14 @@ if (!$order) {
                     </tr>
                 <?php
                     $total += $row['price'];
-                    endforeach; ?>
-                        <tr>
-                            <td colspan="4" align="middle"><b><?= __('Total') ?></b></td>
-                            <td colspan="1"><b>$<?= $total ?></b></td>
-                        </tr>
+                    endforeach;
+                ?>
+                    <tr>
+                        <td colspan="4" align="middle"><b><?= __('Total') ?></b></td>
+                        <td colspan="1"><b>$<?= $total ?></b></td>
+                    </tr>
             </table>
-        <?php endif ?>
+            <?php endif; ?>
         <span><a class="btn btn-primary" href="orders.php"><?= __('Orders') ?></a></span>
         <span><a class="btn btn-primary" href="orders.php"><?= __('Products') ?></a></span>
     </div>

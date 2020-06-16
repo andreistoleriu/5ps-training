@@ -44,7 +44,7 @@ $orders = $stmt->fetchAll();
                         <th><?= __('Created at') ?>
                     </tr>
                 </thead>
-                    
+                  
                 <?php foreach ($orders as $order) : ?>
                     <tr>
                         <td><?= $order['id'] ?></td>
@@ -53,9 +53,9 @@ $orders = $stmt->fetchAll();
                         <td><a href="order.php?id=<?= $order['id'] ?>"><?= __('View') ?></a></td>
                         <td><?= $order['created_at'] ?></td>
                     </tr>
-                <?php endforeach ?>
+                <?php endforeach; ?>
             </table>
-        <?php endif ?>
+            <?php endif; ?>
         <span><a class="btn btn-primary" href="products.php"><?= __('Products') ?></a></span>
     </div>
 </body>
