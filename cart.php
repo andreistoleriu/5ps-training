@@ -48,15 +48,15 @@ if (isset($_POST['checkout'])) {
         $message = ob_get_contents();
         ob_end_clean();
       
-        $query = 'INSERT INTO orders(name, contact_details, created_at) VALUES (?, ?, ?)';
+        $query = 'INSERT INTO orders(name, contact_details, order_total, created_at) VALUES (?, ?, ?, ?)';
         $stmt = $connection->prepare($query);
-        $stmt->execute([$name, $contactDetails, $timestamp]);
+        $stmt->execute([$name, $contactDetails, $total, $timestamp]);
         $lastId = $connection->lastInsertId();
-
-        foreach ($_SESSION['cart'] as $product) {
-            $query = 'INSERT INTO product_order(order_id, product_id, created_at) VALUES (?, ?, ?)';
+        
+        foreach ($rows as $row) {
+            $query = 'INSERT INTO product_order(order_id, product_id, product_price, created_at) VALUES (?, ?, ?, ?)';
             $stmt = $connection->prepare($query);
-            $stmt->execute([$lastId, $product, $timestamp]);
+            $stmt->execute([$lastId, $row['id'], $row['price'], $timestamp]);
         }
 
         mail($to, $subject, $message, $headers);

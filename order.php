@@ -10,6 +10,7 @@ $query = 'SELECT
             orders.*,
             product_order.order_id, 
             product_order.product_id,  
+            product_order.product_price,
             products.*
         FROM orders
         JOIN product_order
@@ -72,10 +73,10 @@ if (!$order) {
                         </td>
                         <td><?= $row['title'] ?></td>
                         <td><?= $row['description'] ?></td>
-                        <td>$<?= $row['price'] ?></td>
+                        <td>$<?= $row['product_price'] ?></td>
                     </tr>
                 <?php
-                    $total += $row['price'];
+                    $total += $row['product_price'];
                     endforeach;
                 ?>
                     <tr>

@@ -4,8 +4,7 @@ require_once 'common.php';
 require_once 'auth.php';
 
 $query = 'SELECT 
-        orders.*, 
-        SUM(products.price) AS price
+        orders.*
         FROM orders
         JOIN product_order
         ON product_order.order_id = orders.id
@@ -26,7 +25,6 @@ $orders = $stmt->fetchAll();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= __('Orders page') ?></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
 </head>
 
 <body>
@@ -49,7 +47,7 @@ $orders = $stmt->fetchAll();
                     <tr>
                         <td><?= $order['id'] ?></td>
                         <td><?= $order['name'] ?></td>
-                        <td>$<?= $order['price'] ?></td>
+                        <td>$<?= $order['order_total'] ?></td>
                         <td><a href="order.php?id=<?= $order['id'] ?>"><?= __('View') ?></a></td>
                         <td><?= $order['created_at'] ?></td>
                     </tr>
