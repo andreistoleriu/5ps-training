@@ -34,7 +34,7 @@ $prodStmt = $connection->prepare($queryProducts);
 $prodRes = $prodStmt->execute([$_GET['id']]);
 $products = $prodStmt->fetchAll();
 
-if (!$order) {
+if (!$products || !$order) {
     $errors['order'][] = __('Order no longer available!');
 }
 
