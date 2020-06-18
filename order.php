@@ -24,7 +24,7 @@ $res = $stmt->execute([$_GET['id']]);
 $order = $stmt->fetchAll();
 
 if (!$order) {
-    $errors['order'][] = __('Order no longer available in the database!');
+    $errors['order'][] = __('Order no longer available!');
 }
 
 ?>
@@ -34,7 +34,7 @@ if (!$order) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= __('Orders page') ?></title>
+    <title><?= __('Order page') ?></title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
 </head>
@@ -44,8 +44,8 @@ if (!$order) {
         <?php if (isset($errors['order'])) : ?>
             <?php $errorKey = 'order' ?>
             <?php include 'errors.php' ?>
-        <?php else : ?>
 
+        <?php else : ?>
             <p><?=__('Order') . ' ' . $order[0]['order_id'] ?></p>
             <p><?= __('Name') . ': ' . $order[0]['name'] ?></p>
             <p><?= __('Email') . ': ' . $order[0]['contact_details'] ?></p>
@@ -84,7 +84,7 @@ if (!$order) {
                         <td colspan="1"><b>$<?= $total ?></b></td>
                     </tr>
             </table>
-            <?php endif; ?>
+        <?php endif; ?>
         <span><a class="btn btn-primary" href="orders.php"><?= __('Orders') ?></a></span>
         <span><a class="btn btn-primary" href="orders.php"><?= __('Products') ?></a></span>
     </div>
