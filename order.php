@@ -6,22 +6,33 @@ require_once 'auth.php';
 $errors = [];
 $total = 0;
 
-$query = 'SELECT 
-            orders.*,
-            product_order.order_id, 
-            product_order.product_id,  
-            product_order.product_price,
-            products.*
-        FROM orders
-        JOIN product_order
-        ON product_order.order_id = orders.id
-        JOIN products
-        ON products.id = product_order.product_id
-        WHERE orders.id = ?';
+$queryOrder = 'SELECT
+            orders.id,
+            orders.name,
+            orders.contact_details
+            FROM orders
+            WHERE orders.id = ?';
 
-$stmt = $connection->prepare($query);
-$res = $stmt->execute([$_GET['id']]);
-$order = $stmt->fetchAll();
+$orderStmt = $connection->prepare($queryOrder);
+$orderRes = $orderStmt->execute([$_GET['id']]);
+$order = $orderStmt->fetch();
+
+$queryProducts = 'SELECT 
+                product_order.order_id,
+                product_order.product_id,
+                product_order.product_price,
+                products.image,
+                products.id,
+                products.title,
+                products.description
+                FROM product_order
+                JOIN products
+                ON products.id = product_order.product_id
+                WHERE product_order.order_id = ?';
+
+$prodStmt = $connection->prepare($queryProducts);
+$prodRes = $prodStmt->execute([$_GET['id']]);
+$products = $prodStmt->fetchAll();
 
 if (!$order) {
     $errors['order'][] = __('Order no longer available!');
@@ -46,9 +57,9 @@ if (!$order) {
             <?php include 'errors.php' ?>
 
         <?php else : ?>
-            <p><?=__('Order') . ' ' . $order[0]['order_id'] ?></p>
-            <p><?= __('Name') . ': ' . $order[0]['name'] ?></p>
-            <p><?= __('Email') . ': ' . $order[0]['contact_details'] ?></p>
+            <p><?=__('Order') . ' ' . $order['id'] ?></p>
+            <p><?= __('Name') . ': ' . $order['name'] ?></p>
+            <p><?= __('Email') . ': ' . $order['contact_details'] ?></p>
 
             <table class="table">
                 <thead class="thead-dark">
@@ -61,22 +72,22 @@ if (!$order) {
                     </tr>
                 </thead>
 
-                <?php foreach ($order as $row) : ?>
+                <?php foreach ($products as $product) : ?>
                     <tr>
-                        <td><?= $row['product_id'] ?></td>
+                        <td><?= $product['product_id'] ?></td>
                         <td>
-                            <?php if ($row['image']) : ?>
-                                <img alt="<?= __('Product image') ?>" src="img/<?= $row['image'] ?>" width="150px">
+                            <?php if ($product['image']) : ?>
+                                <img alt="<?= __('Product image') ?>" src="img/<?= $product['image'] ?>" width="150px">
                             <?php else : ?>
                                 <p><?= __('No image') ?></p>
                             <?php endif; ?>
                         </td>
-                        <td><?= $row['title'] ?></td>
-                        <td><?= $row['description'] ?></td>
-                        <td>$<?= $row['product_price'] ?></td>
+                        <td><?= $product['title'] ?></td>
+                        <td><?= $product['description'] ?></td>
+                        <td>$<?= $product['product_price'] ?></td>
                     </tr>
                 <?php
-                    $total += $row['product_price'];
+                    $total += $product['product_price'];
                     endforeach;
                 ?>
                     <tr>
