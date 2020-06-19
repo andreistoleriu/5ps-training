@@ -56,6 +56,7 @@ $rows = $stmt->fetchAll();
                         <td>$<?= $row['price'] ?></td>
                         <td>
                             <a href="product.php?edit=<?= $row['id']; ?>" class="btn btn-warning"><?= __('Edit') ?></a>
+                            <input type="submit" name="delete" class="btn btn-danger" value="<?= __('Delete') ?>" />
                         </td>
                         <td><input type="hidden" name="id" value="<?= $row['id'] ?>" /></td>
                 </form>
