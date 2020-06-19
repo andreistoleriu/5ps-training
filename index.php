@@ -41,6 +41,7 @@ $rows = $stmt->fetchAll();
                     <th scope="col"><?= __('Price') ?></th>
                     <th scope="col"><?= __('Action') ?></th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <?php foreach ($rows as $row) : ?>
@@ -52,6 +53,7 @@ $rows = $stmt->fetchAll();
                         <td> $ <?= $row['price'] ?></td>
                         <td><input type="submit" name="add" class="btn btn-primary" value="<?= __('Add') ?>" /></td>
                         <td><input type="hidden" name="id" value="<?= $row['id'] ?>" /></td>
+                        <td><a href="product_details.php?=<?= $row['id']; ?>" class="btn btn-warning"><?= __('View Details') ?></a></td>
                     </tr>
                 </form>
             <?php endforeach; ?>

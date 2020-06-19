@@ -44,7 +44,7 @@ $rows = $stmt->fetchAll();
                     <th scope="col"><?= __('Title') ?></th>
                     <th scope="col"><?= __('Description') ?></th>
                     <th scope="col"><?= __('Price') ?></th>
-                    <th scope="col" colspan="2"><?= __('Action') ?></th>
+                    <th scope="col" colspan="3"><?= __('Action') ?></th>
                 </tr>
             </thead>
             <?php foreach ($rows as $row) : ?>
@@ -56,10 +56,8 @@ $rows = $stmt->fetchAll();
                         <td>$<?= $row['price'] ?></td>
                         <td>
                             <a href="product.php?edit=<?= $row['id']; ?>" class="btn btn-warning"><?= __('Edit') ?></a>
-                            <input type="submit" name="delete" class="btn btn-danger" value="<?= __('Delete') ?>" />
                         </td>
                         <td><input type="hidden" name="id" value="<?= $row['id'] ?>" /></td>
-                    </tr>
                 </form>
             <?php endforeach; ?>
         </table>
@@ -68,6 +66,7 @@ $rows = $stmt->fetchAll();
             <a href="?logout" class="btn btn-warning"><?= __('Log out') ?></a>
             <a href="orders.php" class="btn btn-primary"><?= __('Orders') ?></a>
             <a href="product.php" class="btn btn-primary"><?= __('Add new product') ?></a>
+            <a href="comments.php" class="btn btn-primary"><?= __('Manage comments') ?></a>
         </div>
     </div>
 </body>
