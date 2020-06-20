@@ -53,7 +53,7 @@ $rows = $stmt->fetchAll();
                         <td> $ <?= $row['price'] ?></td>
                         <td><input type="submit" name="add" class="btn btn-primary" value="<?= __('Add') ?>" /></td>
                         <td><input type="hidden" name="id" value="<?= $row['id'] ?>" /></td>
-                        <td><a href="product_details.php?=<?= $row['id']; ?>" class="btn btn-warning"><?= __('View Details') ?></a></td>
+                        <td><a href="product_details.php?view_details=<?= $row['id']; ?>" class="btn btn-warning"><?= __('View Details') ?></a></td>
                     </tr>
                 </form>
             <?php endforeach; ?>
