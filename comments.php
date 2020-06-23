@@ -68,7 +68,7 @@ if (isset($_POST['edit_comm'])) {
             <?php $errorKey = 'editComment' ?>
             <?php include 'errors.php' ?>
         <?php else : ?>
-            <h5 style="margin-top: 15px">Comments: </h5>
+            <h5 style="margin-top: 15px"><?= __('Comments:') ?> </h5>
             <hr style="background-color: black; height: 1px;">
             <?php foreach ($comments as $comment) : ?>
                 <form method="post" action="comments.php?id=<?= $comment['cid']; ?>" class="form-group">

@@ -59,7 +59,7 @@ if (!$products || !$order) {
         <?php else : ?>
             <p><?=__('Order') . ' ' . $order['id'] ?></p>
             <p><?= __('Name') . ': ' . $order['name'] ?></p>
-            <p><?= __('Email') . ': ' . $order['contact_details'] ?></p>
+            <p><?= __('Contact details') . ': ' . $order['contact_details'] ?></p>
 
             <table class="table">
                 <thead class="thead-dark">
